@@ -8,7 +8,7 @@ static int const NumHidden = 11;
 static int const NumInputs = 3;
 static int const NumOutputs = 2;
 
-typedef char weight;
+typedef char err_acc;
 
 // Input -> Hidden layer 'weights'
 bool W1[NumHidden][NumInputs];
@@ -26,8 +26,8 @@ bool Hidden[NumHidden];
 bool Output[NumOutputs];
 
 // Error gradient accumulators
-weight E1[NumHidden][NumInputs];
-weight E2[NumOutputs][NumHidden];
+err_acc E1[NumHidden][NumInputs];
+err_acc E2[NumOutputs][NumHidden];
 
 
 // Predict
@@ -55,14 +55,14 @@ void forward() {
 }
 
 
-void incWeight(weight & w) {
+void incWeight(err_acc & w) {
     if (w < 3) {
         w++;
     }
 }
 
 
-void decWeight(weight & w) {
+void decWeight(err_acc & w) {
     if (w > -3) {
         w--;
     }
