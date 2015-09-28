@@ -4,7 +4,7 @@
 #include <iostream>
 #include <stdlib.h> 
 
-static int const NumHidden = 11;
+static int const NumHidden = 3;
 static int const NumInputs = 3;
 static int const NumOutputs = 2;
 
