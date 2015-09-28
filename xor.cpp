@@ -55,14 +55,14 @@ void forward() {
 }
 
 
-void incWeight(err_acc & w) {
+void incErr(err_acc & w) {
     if (w < 3) {
         w++;
     }
 }
 
 
-void decWeight(err_acc & w) {
+void decErr(err_acc & w) {
     if (w > -3) {
         w--;
     }
@@ -97,7 +97,7 @@ int backward(bool expected[NumOutputs]) {
         for (int i = 0; i < NumHidden; i++) {
             if ((W2[o][i] ^ Hidden[i]) != expected[o]) {
                 grad[i]++;;
-                incWeight(E2[o][i]);
+                incErr(E2[o][i]);
                 if ((rand() % 4) < E2[o][i]) {
                     W2[o][i] = !W2[o][i];
                     E2[o][i] = 0;
@@ -105,7 +105,7 @@ int backward(bool expected[NumOutputs]) {
                 }
             }
             else {
-                decWeight(E2[o][i]);
+                decErr(E2[o][i]);
             }
         }
     }
@@ -114,7 +114,7 @@ int backward(bool expected[NumOutputs]) {
         for (int j = 0; j < NumHidden; j++) {
             if (grad[j] >= NumOutputs / 2) {
                 if (!(Input[i] ^ Hidden[j])) {
-                    incWeight(E1[j][i]);
+                    incErr(E1[j][i]);
                     if ((rand() % 4) < E1[j][i]) {
                         W1[j][i] = !W1[j][i];
                         E1[j][i] = 0;
@@ -122,7 +122,7 @@ int backward(bool expected[NumOutputs]) {
                     }
                 }
                 else {
-                    decWeight(E1[j][i]);
+                    decErr(E1[j][i]);
                 }
             }
         }
