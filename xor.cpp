@@ -4,7 +4,7 @@
 #include <iostream>
 #include <stdlib.h> 
 
-static int const NumHidden = 3;
+static int const NumHidden = 13;
 static int const NumInputs = 3;
 static int const NumOutputs = 2;
 
@@ -160,7 +160,7 @@ int backward_2(bool expected[NumOutputs]) {
 			if ((W2[o][i] ^ Hidden[i]) != expected[o]) {
 				grad[i]++;
 				incErr(E2[o][i]);
-				if ((rand() % 64) < E2[o][i]) {
+				if ((rand() % 4) < E2[o][i]) {
 					W2[o][i] = !W2[o][i];
 					E2[o][i] = 0;
 					numUpdates++;
@@ -178,7 +178,7 @@ int backward_2(bool expected[NumOutputs]) {
 			if ((rand() % NumOutputs) < grad[j]) {
 				if (!(Input[i] ^ Hidden[j])) {
 					incErr(E1[j][i]);
-					if ((rand() % 64) < E1[j][i]) {
+					if ((rand() % 4) < E1[j][i]) {
 						W1[j][i] = !W1[j][i];
 						E1[j][i] = 0;
 						numUpdates++;
@@ -224,11 +224,11 @@ int train() {
 
 	float avgA = 0.0f;
 
-	for (int i = 0; i < 2000; i++) {
+	for (int i = 0; i < 20000; i++) {
 
-		Input[0] = (i & 1) != 0;
-		Input[1] = (i & 2) != 0;
-		Input[2] = (i & 3) == 0;
+		Input[0] = (rand() & 1) != 0;
+		Input[1] = (rand() & 2) != 0;
+		Input[2] = (rand() & 3) != 0;
 		bool ex = Input[0] ^ (Input[1] ^ Input[2]);
 
 		// Add noise
@@ -245,9 +245,9 @@ int train() {
 		int const numUpdates = backward_2(exps);
 
 		float const kI = 0.99f;
-		avgA = kI * avgA + (Output[0] == ex /*&& Output[1] == !ex*/ ? 1.0f - kI : 0.0f);
+		avgA = kI * avgA + (Output[0] == ex && Output[1] == !ex ? 1.0f - kI : 0.0f);
 
-		if ((i % 10) == 0) {
+		if ((i % 100) == 0) {
 			std::cout << (i + 1) << " I:" << Input[0] << " " << Input[1] << " " << Input[2] << " O:" << Output[0] << " " << Output[1];
 
 			if (Output[0] == ex && Output[1] == !ex) {
